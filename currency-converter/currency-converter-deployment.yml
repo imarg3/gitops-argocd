@@ -16,8 +16,16 @@ spec:
       containers:
       - name: currency-converter
         image: admincoder/currency-converter:1.1.0
+        args: ["gunicorn", "-w 1", "app:app", "-b 0.0.0.0:8000"]
         ports:
         - containerPort: 8000
+        env:
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: api-config
+                key: redis.host
+
       - name: redis
         image: redis:3.2.0
         resources:
